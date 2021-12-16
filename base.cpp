@@ -130,7 +130,7 @@ int main(int argc,char* argv[]){
         int set = 0;
         int z = 1;
         for(int j=0;j<indexing_bit_count;j++){
-            set += indexing_bit[j] * z;
+            set += bit[indexing_bit[j]] * z;
             z *= 2;
         }
         
