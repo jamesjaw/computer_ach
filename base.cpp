@@ -125,7 +125,7 @@ int main(int argc,char* argv[]){
         for(int j=0;j<address_bits;j++){
             bit[j] = add % 10;
             add = add / 10;
-            if(j == offset_bit_count + indexing_bit_count -1) tag = add;
+            if(j == offset_bit_count -1) tag = add;
         }
         
         int set = 0;
