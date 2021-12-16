@@ -121,10 +121,11 @@ int main(int argc,char* argv[]){
     for(int i=0;i<p_count;i++){
         int bit[address_bits+1];
         int add = p_add[i];
-        
+        int tag = 0;
         for(int j=0;j<address_bits;j++){
             bit[j] = add % 10;
             add = add / 10;
+            if(j == offset_bit_count + indexing_bit_count -1) tag = add;
         }
         
         int set = 0;
@@ -134,7 +135,7 @@ int main(int argc,char* argv[]){
             z *= 2;
         }
         
-        if(hit(associativity, my_cach[set], p_add[i])){
+        if(hit(associativity, my_cach[set], tag)){
             hitornot[i] = true;
         }
         else{
