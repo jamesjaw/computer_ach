@@ -5,6 +5,11 @@
 
 using namespace std;
 
+struct cach{
+    int NRU_bit = 1;
+    int tag = 0;
+};
+
 int miss = 0;
 int p_count = 0;
 
@@ -22,35 +27,36 @@ bool hitornot[maxx];
 
 int bit_to_size[11];
 
-int NRU(int way,int* recode){
+
+int NRU(int way,cach* recode){
     int pick = 0;
     bool find = false;
     
     while(find == false){
         for(int i=0;i<way;i++){
-            if(recode[i] == 1){
+            if(recode[i].NRU_bit == 1){
                 pick = i;
-                recode[i] = 0;
+                recode[i].NRU_bit = 0;
                 find = true;
                 break;
             }
         }
         if(find == false){
-            for(int i=0;i<way;i++) recode[i] = 1;
+            for(int i=0;i<way;i++) recode[i].NRU_bit = 1;
         }
     }
     return pick;
 }
 
-bool hit(int way,int* set,int add){
+bool hit(int way,cach* set,int add){
     for(int i=0;i<way;i++){
-        if(set[i] == add){
+        if(set[i].tag == add){
             return true;
         }
     }
     
     int pick = NRU(way, set);
-    set[pick] = add;
+    set[pick].tag = add;
     return false;
 }
 
@@ -88,7 +94,7 @@ int main(int argc,char* argv[]){
     in.flush();
     in.close();
     
-    //process
+    //init
     for(int i=0;i<11;i++){
         if(block_size<=bit_to_size[i]){
             offset_bit_count = i;
@@ -106,24 +112,50 @@ int main(int argc,char* argv[]){
     for(int i=0;i<indexing_bit_count;i++){
         indexing_bit[i] = temp++;
     }
-    
-    for(int i=0;i<p_count;i++){
-        
+    //creat cache
+    cach** my_cach = new cach*[cache_sets];
+    for(int i=0;i<cache_sets;i++){
+        my_cach[i] = new cach[associativity];
     }
-    
+    //process
+    for(int i=0;i<p_count;i++){
+        int bit[address_bits+1];
+        int add = p_add[i];
+        
+        for(int j=0;j<address_bits;j++){
+            bit[j] = add % 10;
+            add = add / 10;
+        }
+        
+        int set = 0;
+        int z = 1;
+        for(int j=0;j<indexing_bit_count;j++){
+            set += indexing_bit[j] * z;
+            z *= 2;
+        }
+        
+        if(hit(associativity, my_cach[set], p_add[i])){
+            hitornot[i] = true;
+        }
+        else{
+            hitornot[i] = false;
+            miss++;
+        }
+    }
+
     //output file
     out.open(argv[3],ios::out);
     out<<"Address bits: "<<address_bits<<"\n";
     out<<"Block size: "<<block_size<<"\n";
     out<<"Cache sets: "<<cache_sets<<"\n";
     out<<"Associativity: "<<associativity<<"\n\n";
-    
+    //==================================================
     out<<"Offset bit count: "<<offset_bit_count<<"\n";
     out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
     out<<"Indexing bits:";
     for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
     out<<"\n\n";
-    
+    //==================================================
     out<<".benchmark testcase1\n";
     for(int i=0;i<p_count;i++){
         out<<p_add<<" ";
@@ -133,8 +165,15 @@ int main(int argc,char* argv[]){
             out<<"hit\n";
     }
     out<<".end\n\n";
-    
+    //=================================================
     out<<"Total cache miss count: "<<miss;
     out.close();
+    
+    //delete malloc
+    for(int i=0;i<cache_sets;i++){
+        delete [] my_cach[i];
+    }
+    delete [] my_cach;
+    
     return 0;
 }
