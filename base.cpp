@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 #define maxx 100
 
 using namespace std;
@@ -17,6 +18,8 @@ int address_bits = 0;
 int block_size = 0;
 int cache_sets = 0;
 int associativity = 0;
+
+string str[30];
 
 int offset_bit_count = 0;
 int indexing_bit_count = 0;
@@ -83,7 +86,8 @@ int main(int argc,char* argv[]){
     //input data
     fstream in,out;
     in.open(argv[1],ios::in);
-    in>>address_bits>>block_size>>cache_sets>>associativity;
+    
+    in>>str[0]>>address_bits>>str[1]>>block_size>>str[2]>>cache_sets>>str[3]>>associativity;
     in.flush();
     in.close();
     
@@ -146,10 +150,10 @@ int main(int argc,char* argv[]){
 
     //output file
     out.open(argv[3],ios::out);
-    out<<"Address bits: "<<address_bits<<"\n";
-    out<<"Block size: "<<block_size<<"\n";
-    out<<"Cache sets: "<<cache_sets<<"\n";
-    out<<"Associativity: "<<associativity<<"\n\n";
+    out<<"Address bits: "<<str[0]<<"\n";
+    out<<"Block size: "<<str[1]<<"\n";
+    out<<"Cache sets: "<<str[2]<<"\n";
+    out<<"Associativity: "<<str[3]<<"\n\n";
     //==================================================
     out<<"Offset bit count: "<<offset_bit_count<<"\n";
     out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
