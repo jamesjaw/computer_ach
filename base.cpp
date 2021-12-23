@@ -153,10 +153,10 @@ int main(int argc,char* argv[]){
 
     //output file
     out.open(argv[3],ios::out);
-    out<<"Address bits: "<<str[0]<<"\n";
-    out<<"Block size: "<<str[1]<<"\n";
-    out<<"Cache sets: "<<str[2]<<"\n";
-    out<<"Associativity: "<<str[3]<<"\n\n";
+    out<<"Address bits: "<<address_bits<<"\n";
+    out<<"Block size: "<<block_size<<"\n";
+    out<<"Cache sets: "<<cache_sets<<"\n";
+    out<<"Associativity: "<<associativity<<"\n\n";
     //==================================================
     out<<"Offset bit count: "<<offset_bit_count<<"\n";
     out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
