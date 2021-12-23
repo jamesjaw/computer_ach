@@ -26,8 +26,8 @@ vector<int> indexing_bit;
 vector<bool> hitornot;
 
 int bit_to_size[11];
-double C_array[2000][2000];
-double Q_array[2000];
+
+
 int NRU(int way,cach* recode){
     int pick = 0;
     bool find = false;
@@ -96,6 +96,13 @@ int main(int argc,char* argv[]){
     indexing_bit_count = size2bit(cache_sets);
 
     //bonus
+    double** C_array = new double*[address_bits];
+    for(int i=0;i<p_count;i++){
+        C_array[i] = new double[address_bits];
+    }
+    
+    double* Q_array = new double[address_bits];
+    
     for(int i=0;i<address_bits - offset_bit_count - 1;i++){
         for(int j=i+1;j<address_bits - offset_bit_count;j++){
             int E = 0;
@@ -210,5 +217,10 @@ int main(int argc,char* argv[]){
     }
     delete [] my_cach;
     
+    for(int i=0;i<p_count;i++){
+        delete [] C_array[i];
+    }
+    delete [] C_array;
+    delete [] Q_array;
     return 0;
 }
