@@ -9,7 +9,7 @@ using namespace std;
 vector<string> v_str;
 
 struct cach{
-    int NRU_bit = 1;
+    int NRU_bit;
     string tag;
 };
 
@@ -126,6 +126,12 @@ int main(int argc,char* argv[]){
     for(int i=0;i<cache_sets;i++){
         my_cach[i] = new cach[associativity];
     }
+    for(int i=0;i<cache_sets;i++){
+        for(int j=0;j<associativity;j++){
+            my_cach[i][j].NRU_bit = 1;
+        }
+    }
+    
     //process
     for(int i=1;i<=p_count;i++){
         string tag;
