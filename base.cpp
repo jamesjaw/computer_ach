@@ -84,22 +84,22 @@ int main(int argc,char* argv[]){
 
     //input data
     fstream in,out;
-    in.open(argv[1],ios::in);
+    //in.open(argv[1],ios::in);
     string s;
-    in>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
-    in.flush();
-    in.close();
+    cin>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
+    //in.flush();
+    //in.close();
     
-    in.open(argv[2],ios::in);
-    string s1;
-    in>>s1;
-    while(in>>s){
+    //in.open(argv[2],ios::in);
+    string s1,s2;
+    cin>>s1>>s2;
+    while(cin>>s){
         v_str.push_back(s);
     }
     p_count = v_str.size() - 1;
     
-    in.flush();
-    in.close();
+    //in.flush();
+    //in.close();
     
     //init
     for(int i=0;i<11;i++){
@@ -133,14 +133,15 @@ int main(int argc,char* argv[]){
     }
     
     //process
-    for(int i=1;i<=p_count;i++){
+    for(int i=0;i<p_count;i++){
         string tag;
-        tag.assign(v_str[i],offset_bit_count,address_bits - offset_bit_count);
+        //string index 01234567 not 76543210
+        tag.assign(v_str[i],0,address_bits - offset_bit_count);
         
         int set = 0;
         int z = 1;
         for(int j=0;j<indexing_bit_count;j++){
-            if(v_str[i][indexing_bit[j]] == '1'){
+            if(v_str[i][address_bits - 1 - indexing_bit[j]] == '1'){
                 set += z;
             }
             z *= 2;
@@ -156,30 +157,30 @@ int main(int argc,char* argv[]){
     }
 
     //output file
-    out.open(argv[3],ios::out);
-    out<<"Address bits: "<<address_bits<<"\n";
-    out<<"Block size: "<<block_size<<"\n";
-    out<<"Cache sets: "<<cache_sets<<"\n";
-    out<<"Associativity: "<<associativity<<"\n\n";
+    //out.open(argv[3],ios::out);
+    cout<<"Address bits: "<<address_bits<<"\n";
+    cout<<"Block size: "<<block_size<<"\n";
+    cout<<"Cache sets: "<<cache_sets<<"\n";
+    cout<<"Associativity: "<<associativity<<"\n\n";
     //==================================================
-    out<<"Offset bit count: "<<offset_bit_count<<"\n";
-    out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
-    out<<"Indexing bits:";
-    for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
-    out<<"\n\n";
+    cout<<"Offset bit count: "<<offset_bit_count<<"\n";
+    cout<<"Indexing bit count: "<<indexing_bit_count<<"\n";
+    cout<<"Indexing bits:";
+    for(int i=indexing_bit_count-1;i>=0;i--) cout<<" "<<indexing_bit[i];
+    cout<<"\n\n";
     //==================================================
-    out<<s1<<"\n";
+    cout<<s1<<" "<<s2<<"\n";
     for(int i=0;i<p_count;i++){
-        out<<v_str[i]<<" ";
+        cout<<v_str[i]<<" ";
         if(hitornot[i] == false)
-            out<<"miss\n";
+            cout<<"miss\n";
         else
-            out<<"hit\n";
+            cout<<"hit\n";
     }
-    out<<".end\n\n";
+    cout<<".end\n\n";
     //=================================================
-    out<<"Total cache miss count: "<<miss;
-    out.close();
+    cout<<"Total cache miss count: "<<miss;
+    //out.close();
     
     //delete malloc
     for(int i=0;i<cache_sets;i++){
