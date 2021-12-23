@@ -6,7 +6,6 @@
 
 using namespace std;
 
-string str[30];
 vector<string> v_str;
 
 struct cach{
@@ -27,7 +26,6 @@ int offset_bit_count = 0;
 int indexing_bit_count = 0;
 int indexing_bit[maxx];
 
-int p_add[maxx];
 bool hitornot[maxx];
 
 int bit_to_size[11];
@@ -70,7 +68,6 @@ int main(int argc,char* argv[]){
     //init
     for(int i=0;i<maxx;i++){
         indexing_bit[i] = 0;
-        p_add[i] = 0;
         hitornot[i] = false;
     }
     bit_to_size[0] = 0;
@@ -88,17 +85,18 @@ int main(int argc,char* argv[]){
     //input data
     fstream in,out;
     in.open(argv[1],ios::in);
-    
-    in>>str[0]>>address_bits>>str[1]>>block_size>>str[2]>>cache_sets>>str[3]>>associativity;
+    string s;
+    in>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
     in.flush();
     in.close();
     
     in.open(argv[2],ios::in);
-    string s;
+    string s1;
+    in>>s1;
     while(in>>s){
         v_str.push_back(s);
     }
-    p_count = v_str.size() - 2;
+    p_count = v_str.size() - 1;
     
     in.flush();
     in.close();
@@ -164,9 +162,9 @@ int main(int argc,char* argv[]){
     for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
     out<<"\n\n";
     //==================================================
-    out<<v_str[0]<<"\n";
+    out<<s1<<"\n";
     for(int i=0;i<p_count;i++){
-        out<<p_add<<" ";
+        out<<v_str[i]<<" ";
         if(hitornot[i] == false)
             out<<"miss\n";
         else
