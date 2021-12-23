@@ -174,7 +174,7 @@ int main(int argc,char* argv[]){
     }
     out<<".end\n\n";
     //=================================================
-    out<<"Total cache miss count: "<<miss;
+    out<<"Total cache miss count: "<<miss<<"\n";
     //out.close();
     
     //delete malloc
