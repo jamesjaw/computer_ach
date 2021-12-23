@@ -135,7 +135,7 @@ int main(int argc,char* argv[]){
     for(int i=0;i<indexing_bit_count;i++){
         double max = -1;
         int pick = 0;
-        for(int j=0;i<address_bits - offset_bit_count;j++){
+        for(int j=0;j<address_bits - offset_bit_count;j++){
             if(Q_array[j] > max){
                 max = Q_array[j];
                 pick = j;
