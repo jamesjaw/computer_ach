@@ -60,27 +60,25 @@ bool hit(int way,cach* set,string add){
     return false;
 }
 
+int size2bit(int size){
+    int bit = 0;
+    if(size == 0) return 0;
+    else if(size >=2){
+        while(size !=1){
+            size /= 2;
+            bit++;
+        }
+    }
+    return bit;
+}
 
 int main(int argc,char* argv[]){
-    //init
-    bit_to_size[0] = 0;
-    bit_to_size[1] = 2;
-    bit_to_size[2] = 4;
-    bit_to_size[3] = 8;
-    bit_to_size[4] = 16;
-    bit_to_size[5] = 32;
-    bit_to_size[6] = 64;
-    bit_to_size[7] = 128;
-    bit_to_size[8] = 256;
-    bit_to_size[9] = 512;
-    bit_to_size[10] = 1024;
-
     //input data
     fstream in1,in2,out;
+    
     in1.open(argv[1],ios::in);
     string s;
     in1>>s>>address_bits>>s>>block_size>>s>>cache_sets>>s>>associativity;
-    //in.flush();
     in1.close();
     
     in2.open(argv[2],ios::in);
@@ -91,27 +89,14 @@ int main(int argc,char* argv[]){
         p_count++;
     }
     p_count --;
-    
-    //in.flush();
     in2.close();
     
     //init
-    for(int i=0;i<11;i++){
-        if(block_size<=bit_to_size[i]){
-            offset_bit_count = i;
-            break;
-        }
-    }
-    for(int i=0;i<11;i++){
-        if(cache_sets<=bit_to_size[i]){
-            indexing_bit_count = i;
-            break;
-        }
-    }
-    
+    offset_bit_count = size2bit(block_size);
+    indexing_bit_count = size2bit(cache_sets);
+
     //baseline
     int temp = offset_bit_count;
-    
     for(int i=0;i<indexing_bit_count;i++){
         indexing_bit.push_back(temp);
         temp++;
@@ -141,7 +126,6 @@ int main(int argc,char* argv[]){
             }
             z *= 2;
         }
-        
         if(hit(associativity, my_cach[set], tag)){
             hitornot.push_back(true);
         }
@@ -157,13 +141,13 @@ int main(int argc,char* argv[]){
     out<<"Block size: "<<block_size<<"\n";
     out<<"Cache sets: "<<cache_sets<<"\n";
     out<<"Associativity: "<<associativity<<"\n\n";
-    //==================================================
+
     out<<"Offset bit count: "<<offset_bit_count<<"\n";
     out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
     out<<"Indexing bits:";
     for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
     out<<"\n\n";
-    //==================================================
+
     out<<s1<<" "<<s2<<"\n";
     for(int i=0;i<p_count;i++){
         out<<v_str[i]<<" ";
@@ -173,9 +157,9 @@ int main(int argc,char* argv[]){
             out<<"hit\n";
     }
     out<<".end\n\n";
-    //=================================================
+    
     out<<"Total cache miss count: "<<miss<<"\n";
-    //out.close();
+    out.close();
     
     //delete malloc
     for(int i=0;i<cache_sets;i++){
