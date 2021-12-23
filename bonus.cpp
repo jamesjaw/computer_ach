@@ -97,7 +97,7 @@ int main(int argc,char* argv[]){
 
     //bonus
     double** C_array = new double*[address_bits];
-    for(int i=0;i<p_count;i++){
+    for(int i=0;i<address_bits;i++){
         C_array[i] = new double[address_bits];
     }
     
