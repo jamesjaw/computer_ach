@@ -105,8 +105,8 @@ int main(int argc,char* argv[]){
     
     for(int i=0;i<address_bits - offset_bit_count - 1;i++){
         for(int j=i+1;j<address_bits - offset_bit_count;j++){
-            int E = 0;
-            int D = 0;
+            double E = 0;
+            double D = 0;
             double C = 0;
             for(int k=0;k<p_count;k++){
                 if(i != j){
@@ -121,9 +121,9 @@ int main(int argc,char* argv[]){
     }
     
     for(int i=0;i<address_bits - offset_bit_count;i++){
-        int Z = 0;
-        int O = 0;
-        int Q = 0;
+        double Z = 0;
+        double O = 0;
+        double Q = 0;
         for(int j=0;j<p_count;j++){
             if(v_str[j][i] == '0') Z++;
             else if(v_str[j][i] == '1') O++;
@@ -132,12 +132,7 @@ int main(int argc,char* argv[]){
         else Q = Z/O;
         Q_array[i] = Q;
     }
-    //test==
-    for(int i=0;i<address_bits;i++) cout<<Q_array[i]<<" ";
-    cout<<"\n";
-    
-    //======
-    
+
     for(int i=0;i<indexing_bit_count;i++){
         double max = -1;
         int pick = 0;
