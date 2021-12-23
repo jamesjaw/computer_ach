@@ -6,9 +6,12 @@
 
 using namespace std;
 
+string str[30];
+vector<string> v_str;
+
 struct cach{
     int NRU_bit = 1;
-    int tag = 0;
+    string tag;
 };
 
 int miss = 0;
@@ -19,7 +22,6 @@ int block_size = 0;
 int cache_sets = 0;
 int associativity = 0;
 
-string str[30];
 
 int offset_bit_count = 0;
 int indexing_bit_count = 0;
@@ -51,7 +53,7 @@ int NRU(int way,cach* recode){
     return pick;
 }
 
-bool hit(int way,cach* set,int add){
+bool hit(int way,cach* set,string add){
     for(int i=0;i<way;i++){
         if(set[i].tag == add){
             return true;
@@ -92,9 +94,12 @@ int main(int argc,char* argv[]){
     in.close();
     
     in.open(argv[2],ios::in);
-    while(in>>p_add[p_count]){
-        p_count++;
+    string s;
+    while(in>>s){
+        v_str.push_back(s);
     }
+    p_count = v_str.size() - 2;
+    
     in.flush();
     in.close();
     
@@ -111,8 +116,10 @@ int main(int argc,char* argv[]){
             break;
         }
     }
-    int temp = offset_bit_count;
+    
     //baseline
+    int temp = offset_bit_count;
+    
     for(int i=0;i<indexing_bit_count;i++){
         indexing_bit[i] = temp++;
     }
@@ -122,20 +129,16 @@ int main(int argc,char* argv[]){
         my_cach[i] = new cach[associativity];
     }
     //process
-    for(int i=0;i<p_count;i++){
-        int bit[address_bits+1];
-        int add = p_add[i];
-        int tag = 0;
-        for(int j=0;j<address_bits;j++){
-            bit[j] = add % 10;
-            add = add / 10;
-            if(j == offset_bit_count -1) tag = add;
-        }
+    for(int i=1;i<=p_count;i++){
+        string tag;
+        tag.assign(v_str[i],offset_bit_count,address_bits - offset_bit_count);
         
         int set = 0;
         int z = 1;
         for(int j=0;j<indexing_bit_count;j++){
-            set += bit[indexing_bit[j]] * z;
+            if(v_str[i][indexing_bit[j]] == '1'){
+                set += z;
+            }
             z *= 2;
         }
         
@@ -161,7 +164,7 @@ int main(int argc,char* argv[]){
     for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
     out<<"\n\n";
     //==================================================
-    out<<".benchmark testcase1\n";
+    out<<v_str[0]<<"\n";
     for(int i=0;i<p_count;i++){
         out<<p_add<<" ";
         if(hitornot[i] == false)
