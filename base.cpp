@@ -2,7 +2,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#define maxx 100
 
 using namespace std;
 
@@ -89,8 +88,9 @@ int main(int argc,char* argv[]){
     in2>>s1>>s2;
     while(in2>>s){
         v_str.push_back(s);
+        p_count++;
     }
-    p_count = v_str.size() - 1;
+    p_count --;
     
     //in.flush();
     in2.close();
