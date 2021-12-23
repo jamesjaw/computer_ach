@@ -141,7 +141,7 @@ int main(int argc,char* argv[]){
                 pick = j;
             }
         }
-        indexing_bit[i] = address_bits -1 - pick;
+        indexing_bit.push_back(address_bits -1 - pick);
         Q_array[pick] = -2;
         for(int j=0;j<indexing_bit_count;j++){
             if(j!=pick){
