@@ -132,6 +132,12 @@ int main(int argc,char* argv[]){
         else Q = Z/O;
         Q_array[i] = Q;
     }
+    //test==
+    for(int i=0;i<address_bits;i++) cout<<Q_array[i]<<" ";
+    cout<<"\n";
+    
+    //======
+    
     for(int i=0;i<indexing_bit_count;i++){
         double max = -1;
         int pick = 0;
