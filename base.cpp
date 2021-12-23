@@ -79,7 +79,7 @@ int main(int argc,char* argv[]){
     fstream in1,in2,out;
     in1.open(argv[1],ios::in);
     string s;
-    in1>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
+    in1>>s>>address_bits>>s>>block_size>>s>>cache_sets>>s>>associativity;
     //in.flush();
     in1.close();
     
