@@ -21,12 +21,10 @@ int block_size = 0;
 int cache_sets = 0;
 int associativity = 0;
 
-
 int offset_bit_count = 0;
 int indexing_bit_count = 0;
-int indexing_bit[maxx];
-
-bool hitornot[maxx];
+vector<int> indexing_bit;
+vector<bool> hitornot;
 
 int bit_to_size[11];
 
@@ -66,10 +64,6 @@ bool hit(int way,cach* set,string add){
 
 int main(int argc,char* argv[]){
     //init
-    for(int i=0;i<maxx;i++){
-        indexing_bit[i] = 0;
-        hitornot[i] = false;
-    }
     bit_to_size[0] = 0;
     bit_to_size[1] = 2;
     bit_to_size[2] = 4;
@@ -83,23 +77,23 @@ int main(int argc,char* argv[]){
     bit_to_size[10] = 1024;
 
     //input data
-    fstream in,out;
-    //in.open(argv[1],ios::in);
+    fstream in1,in2,out;
+    in1.open(argv[1],ios::in);
     string s;
-    cin>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
+    in1>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
     //in.flush();
-    //in.close();
+    in1.close();
     
-    //in.open(argv[2],ios::in);
+    in2.open(argv[2],ios::in);
     string s1,s2;
-    cin>>s1>>s2;
-    while(cin>>s){
+    in2>>s1>>s2;
+    while(in2>>s){
         v_str.push_back(s);
     }
     p_count = v_str.size() - 1;
     
     //in.flush();
-    //in.close();
+    in2.close();
     
     //init
     for(int i=0;i<11;i++){
@@ -119,7 +113,8 @@ int main(int argc,char* argv[]){
     int temp = offset_bit_count;
     
     for(int i=0;i<indexing_bit_count;i++){
-        indexing_bit[i] = temp++;
+        indexing_bit.push_back(temp);
+        temp++;
     }
     //creat cache
     cach** my_cach = new cach*[cache_sets];
@@ -148,38 +143,38 @@ int main(int argc,char* argv[]){
         }
         
         if(hit(associativity, my_cach[set], tag)){
-            hitornot[i] = true;
+            hitornot.push_back(true);
         }
         else{
-            hitornot[i] = false;
+            hitornot.push_back(false);
             miss++;
         }
     }
 
     //output file
-    //out.open(argv[3],ios::out);
-    cout<<"Address bits: "<<address_bits<<"\n";
-    cout<<"Block size: "<<block_size<<"\n";
-    cout<<"Cache sets: "<<cache_sets<<"\n";
-    cout<<"Associativity: "<<associativity<<"\n\n";
+    out.open(argv[3],ios::out);
+    out<<"Address bits: "<<address_bits<<"\n";
+    out<<"Block size: "<<block_size<<"\n";
+    out<<"Cache sets: "<<cache_sets<<"\n";
+    out<<"Associativity: "<<associativity<<"\n\n";
     //==================================================
-    cout<<"Offset bit count: "<<offset_bit_count<<"\n";
-    cout<<"Indexing bit count: "<<indexing_bit_count<<"\n";
-    cout<<"Indexing bits:";
-    for(int i=indexing_bit_count-1;i>=0;i--) cout<<" "<<indexing_bit[i];
-    cout<<"\n\n";
+    out<<"Offset bit count: "<<offset_bit_count<<"\n";
+    out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
+    out<<"Indexing bits:";
+    for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
+    out<<"\n\n";
     //==================================================
-    cout<<s1<<" "<<s2<<"\n";
+    out<<s1<<" "<<s2<<"\n";
     for(int i=0;i<p_count;i++){
-        cout<<v_str[i]<<" ";
+        out<<v_str[i]<<" ";
         if(hitornot[i] == false)
-            cout<<"miss\n";
+            out<<"miss\n";
         else
-            cout<<"hit\n";
+            out<<"hit\n";
     }
-    cout<<".end\n\n";
+    out<<".end\n\n";
     //=================================================
-    cout<<"Total cache miss count: "<<miss;
+    out<<"Total cache miss count: "<<miss;
     //out.close();
     
     //delete malloc
