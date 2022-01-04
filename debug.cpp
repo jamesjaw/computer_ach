@@ -2,8 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#define maxx 100
-
+#include <algorithm>
 using namespace std;
 
 vector<string> v_str;
@@ -34,7 +33,6 @@ int NRU(int way,cach* recode){
     bool find = false;
     
     while(find == false){
-        cout<<"check1\n";
         for(int i=0;i<way;i++){
             if(recode[i].NRU_bit == 1){
                 pick = i;
@@ -62,27 +60,25 @@ bool hit(int way,cach* set,string add){
     return false;
 }
 
+int size2bit(int size){
+    int bit = 0;
+    if(size == 0) return 0;
+    else if(size >=2){
+        while(size !=1){
+            size /= 2;
+            bit++;
+        }
+    }
+    return bit;
+}
 
 int main(int argc,char* argv[]){
-    //init
-    bit_to_size[0] = 0;
-    bit_to_size[1] = 2;
-    bit_to_size[2] = 4;
-    bit_to_size[3] = 8;
-    bit_to_size[4] = 16;
-    bit_to_size[5] = 32;
-    bit_to_size[6] = 64;
-    bit_to_size[7] = 128;
-    bit_to_size[8] = 256;
-    bit_to_size[9] = 512;
-    bit_to_size[10] = 1024;
-
     //input data
     fstream in1,in2,out;
+    
     in1.open(argv[1],ios::in);
     string s;
-    in1>>s>>s>>address_bits>>s>>s>>block_size>>s>>s>>cache_sets>>s>>associativity;
-    //in.flush();
+    in1>>s>>address_bits>>s>>block_size>>s>>cache_sets>>s>>associativity;
     in1.close();
     
     in2.open(argv[2],ios::in);
@@ -93,31 +89,90 @@ int main(int argc,char* argv[]){
         p_count++;
     }
     p_count --;
-    
-    //in.flush();
     in2.close();
     
     //init
-    for(int i=0;i<11;i++){
-        if(block_size<=bit_to_size[i]){
-            offset_bit_count = i;
-            break;
-        }
-    }
-    for(int i=0;i<11;i++){
-        if(cache_sets<=bit_to_size[i]){
-            indexing_bit_count = i;
-            break;
-        }
+    offset_bit_count = size2bit(block_size);
+    indexing_bit_count = size2bit(cache_sets);
+
+    //bonus
+    double** C_array = new double*[address_bits];
+    for(int i=0;i<address_bits;i++){
+        C_array[i] = new double[address_bits];
     }
     
-    //baseline
-    int temp = offset_bit_count;
+    double* Q_array = new double[address_bits];
     
+    for(int i=0;i<address_bits - offset_bit_count - 1;i++){
+        for(int j=i+1;j<address_bits - offset_bit_count;j++){
+            double E = 0;
+            double D = 0;
+            double C = 0;
+            for(int k=0;k<p_count;k++){
+                if(i != j){
+                    if(v_str[k][i] == v_str[k][j]) E++;
+                    else D++;
+                }
+            }
+            if(E > D) C = D/E;
+            else C = E/D;
+            C_array[i][j] = C_array[j][i] = C;
+        }
+    }
+    //
+for(int i=0;i<address_bits - offset_bit_count ;i++) C_array[i][i] = 0;
+cout<<"C_arry\n";
+for(int i=0;i<address_bits - offset_bit_count ;i++){
+        for(int j=0;j<address_bits - offset_bit_count;j++){
+            cout<<C_array[i][j]<<" ";
+        }
+cout<<"\n";
+    }
+//
+    for(int i=0;i<address_bits - offset_bit_count;i++){
+        double Z = 0;
+        double O = 0;
+        double Q = 0;
+        for(int j=0;j<p_count;j++){
+            if(v_str[j][i] == '0') Z++;
+            else if(v_str[j][i] == '1') O++;
+        }
+        if(Z > O) Q = O/Z;
+        else Q = Z/O;
+        Q_array[i] = Q;
+    }
+
     for(int i=0;i<indexing_bit_count;i++){
-        indexing_bit.push_back(temp);
-        temp++;
+
+//
+for(int z=0;z<address_bits - offset_bit_count;z++){
+ cout<<Q_array[z]<<" ";
+}
+cout<<"\n";
+//
+        double max = -1;
+        int pick = 0;
+        for(int j=0;j<address_bits - offset_bit_count;j++){
+            if(Q_array[j] > max){
+                max = Q_array[j];
+                pick = j;
+            }
+        }
+	cout<<"poick "<<pick<<"\n";
+        indexing_bit.push_back(address_bits -1 - pick);
+        Q_array[pick] = -2;
+        for(int j=0;j<address_bits - offset_bit_count;j++){
+            if(j!=pick){
+		cout<<"!\n";
+		cout<<"Q "<<Q_array[j]<<"\n";
+		cout<<"C "<<C_array[pick][j]<<"\n";
+                Q_array[j] = Q_array[j]*C_array[pick][j];
+		cout<<"QC "<<Q_array[j]<<"\n";
+            }
+        }
     }
+    sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
+    
     //creat cache
     cach** my_cach = new cach*[cache_sets];
     for(int i=0;i<cache_sets;i++){
@@ -143,7 +198,6 @@ int main(int argc,char* argv[]){
             }
             z *= 2;
         }
-        
         if(hit(associativity, my_cach[set], tag)){
             hitornot.push_back(true);
         }
@@ -152,20 +206,20 @@ int main(int argc,char* argv[]){
             miss++;
         }
     }
-    /*
+
     //output file
     out.open(argv[3],ios::out);
     out<<"Address bits: "<<address_bits<<"\n";
     out<<"Block size: "<<block_size<<"\n";
     out<<"Cache sets: "<<cache_sets<<"\n";
     out<<"Associativity: "<<associativity<<"\n\n";
-    //==================================================
+
     out<<"Offset bit count: "<<offset_bit_count<<"\n";
     out<<"Indexing bit count: "<<indexing_bit_count<<"\n";
     out<<"Indexing bits:";
     for(int i=indexing_bit_count-1;i>=0;i--) out<<" "<<indexing_bit[i];
     out<<"\n\n";
-    //==================================================
+
     out<<s1<<" "<<s2<<"\n";
     for(int i=0;i<p_count;i++){
         out<<v_str[i]<<" ";
@@ -175,15 +229,21 @@ int main(int argc,char* argv[]){
             out<<"hit\n";
     }
     out<<".end\n\n";
-    //=================================================
-    out<<"Total cache miss count: "<<miss;
-    //out.close();
-    */
+    
+    out<<"Total cache miss count: "<<miss<<"\n";
+    out.close();
+    /*
     //delete malloc
     for(int i=0;i<cache_sets;i++){
         delete [] my_cach[i];
     }
     delete [] my_cach;
     
+    for(int i=0;i<p_count;i++){
+        delete [] C_array[i];
+    }
+    delete [] C_array;
+    delete [] Q_array;
+*/
     return 0;
 }
