@@ -71,7 +71,9 @@ int size2bit(int size){
     }
     return bit;
 }
-vector<vector<int>> index_bit_poss;
+vector<int> index_bit_poss[100];
+int poss_count = 0;
+
 void pick_index_bit(double* Q_array,double** C_array,vector<int> index_bit, int indexing_bit_count){
     for(int i=0;i<indexing_bit_count;i++){
         double max = -1;
@@ -96,7 +98,8 @@ void pick_index_bit(double* Q_array,double** C_array,vector<int> index_bit, int 
             }
         }
     }
-    index_bit_poss.push_back(index_bit);
+    if(poss_count < 100)
+        index_bit_poss[poss_count++] = index_bit;
 }
 
 
@@ -161,23 +164,8 @@ int main(int argc,char* argv[]){
         Q_array[i] = Q;
     }
     //pick index bit
-    for(int i=0;i<indexing_bit_count;i++){
-        double max = -1;
-        int pick = 0;
-        for(int j=0;j<address_bits - offset_bit_count;j++){
-            if(Q_array[j] > max){
-                max = Q_array[j];
-                pick = j;
-            }
-        }
-        indexing_bit.push_back(address_bits -1 - pick);
-        Q_array[pick] = -2;
-        for(int j=0;j<indexing_bit_count;j++){
-            if(j!=pick){
-                Q_array[j] *= C_array[j][pick];
-            }
-        }
-    }
+    vector<int> index_bit;
+    pick_index_bit(Q_array,C_array,index_bit, indexing_bit_count);
     
     //creat cache
     cach** my_cach = new cach*[cache_sets];
@@ -193,7 +181,7 @@ int main(int argc,char* argv[]){
     //process
     int lest_miss_count = 99999999;
     int best_index_bit = 0;
-    for(int z=0;z<index_bit_poss.size();z++){
+    for(int z=0;z<poss_count;z++){
         //init cache
         for(int i=0;i<cache_sets;i++){
             for(int j=0;j<associativity;j++){
