@@ -98,8 +98,13 @@ void pick_index_bit(double* Q_array,double** C_array,vector<int> index_bit, int 
             }
         }
     }
-    if(poss_count < 100)
-        index_bit_poss[poss_count++] = index_bit;
+    if(poss_count < 100){
+        for(int i=0;i<indexing_bit_count;i++){
+            index_bit_poss[poss_count][i] = index_bit[i];
+        }
+        poss_count++;
+    }
+
 }
 
 
