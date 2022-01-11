@@ -28,7 +28,8 @@ vector<bool> hitornot;
 double** C_array;
 double* Q_array;
 cach** my_cach;
-vector<vector<int>> set_coll;
+vector<int>* set_coll[100];
+int set_count = 0;
 
 int NRU(int way,cach* recode){
     int pick = 0;
@@ -80,7 +81,10 @@ void find_poss_combin(int needed_bit, double* Q_chart, vector<int> bit_set ,int 
     }
     
     if(needed_bit == 0){
-        set_coll.push_back(bit_set);
+        set_coll[set_count] = new vector<int>;
+        *set_coll[set_count] = bit_set;
+        set_count++;
+        
         max_set--;
         return;
     }
@@ -138,7 +142,7 @@ int try_set_miss(int no_set, int mini_miss){
         int set = 0;
         int z = 1;
         for(int j=0;j<indexing_bit_count;j++){
-            if(v_str[i][address_bits - 1 - set_coll[no_set][j]] == '1'){
+            if(v_str[i][address_bits - 1 - (*set_coll[no_set])[j]] == '1'){
                 set += z;
             }
             z *= 2;
@@ -233,16 +237,16 @@ int main(int argc,char* argv[]){
     vector<int> first_set;
     int pick_set = 0;
     find_poss_combin(indexing_bit_count, Q_array, first_set ,50);
-    if(set_coll.size() == 0){
+    if(set_count == 0){
         cout<<"something wrong\n";
     }
-    else if(set_coll.size() == 1){
-        indexing_bit = set_coll[0];
+    else if(set_count == 1){
+        indexing_bit = *set_coll[0];
     }
     //try which is best index bit set
     else{
         int mini_miss = 21470000;
-        for(int i=0;i<set_coll.size();i++){
+        for(int i=0;i<set_count;i++){
             int result = try_set_miss(i, mini_miss);
             if(result != -1){
                 mini_miss = result;
@@ -250,7 +254,7 @@ int main(int argc,char* argv[]){
             }
         }
     }
-    indexing_bit = set_coll[pick_set];
+    indexing_bit = *set_coll[pick_set];
     //sort index bit
     sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
     
