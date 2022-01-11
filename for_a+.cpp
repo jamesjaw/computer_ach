@@ -96,6 +96,7 @@ int main(int argc,char* argv[]){
     indexing_bit_count = size2bit(cache_sets);
 
     //bonus
+    //malloc place for C_chart and Q_chart
     double** C_array = new double*[address_bits];
     for(int i=0;i<address_bits;i++){
         C_array[i] = new double[address_bits];
@@ -103,6 +104,7 @@ int main(int argc,char* argv[]){
     
     double* Q_array = new double[address_bits];
     
+    //bulid C_chart
     for(int i=0;i<address_bits - offset_bit_count - 1;i++){
         for(int j=i+1;j<address_bits - offset_bit_count;j++){
             double E = 0;
@@ -119,7 +121,8 @@ int main(int argc,char* argv[]){
             C_array[i][j] = C_array[j][i] = C;
         }
     }
-
+    
+    //build Q_chart
     for(int i=0;i<address_bits - offset_bit_count;i++){
         double Z = 0;
         double O = 0;
@@ -132,7 +135,8 @@ int main(int argc,char* argv[]){
         else Q = Z/O;
         Q_array[i] = Q;
     }
-
+    
+    //pick best bit for index
     for(int i=0;i<indexing_bit_count;i++){
         double max = -1;
         int pick = 0;
