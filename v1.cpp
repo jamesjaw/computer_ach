@@ -99,6 +99,9 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set){
         int pick = same_value_bit[i];
         double my_chart[35];
         for(int j=0;j<indexing_bit_count;j++) my_chart[j] = chart[j];
+        cout<<"round:"<<i<<"chart:\n";
+        for(int j=0;j<indexing_bit_count;j++) cout<<my_chart[j]<<" ";
+        cout<<"\n";
         vector<int> my_set = set;
         
         my_set.push_back(pick);
