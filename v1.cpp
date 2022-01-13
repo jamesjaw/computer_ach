@@ -87,9 +87,9 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
         if(picked[j] == 0){
             if(chart[j] > 0){
                 //max = chart[j];
-                same_value_count = 0;
+                //same_value_count = 0;
                 same_value_bit[same_value_count++] = j;
-            //}
+            }
             //else if(chart[j] == max){
                 //same_value_bit[same_value_count++] = j;
             //}
@@ -124,6 +124,36 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
         }
     }
 }
+int mini_miss = 214700000;
+bool miss_right(int no, cach** cache){
+    int temp_miss = 0;
+    for(int i=0;i<cache_sets;i++){
+        for(int j=0;j<associativity;j++){
+            cache[i][j].NRU_bit = 1;
+            cache[i][j].tag = "-1";
+        }
+    }
+    for(int i=0;i<p_count;i++){
+        string tag;
+        //string index 01234567 not 76543210 so pick 0~x for tag bit
+        tag.assign(v_str[i], 0, address_bits - offset_bit_count);
+        
+        int set = 0;
+        int z = 1;
+        for(int j=0;j<indexing_bit_count;j++){
+            if(v_str[i][address_bits - 1 - coll_set[no][j]] == '1'){
+                set += z;
+            }
+            z *= 2;
+        }
+        if(!hit(associativity, cache[set], tag)){
+            temp_miss++;
+            if(temp_miss > mini_miss) return false;
+        }
+    }
+    mini_miss = temp_miss;
+    return true;
+}
 
 
 int main(int argc,char* argv[]){
@@ -149,6 +179,11 @@ int main(int argc,char* argv[]){
     offset_bit_count = size2bit(block_size);
     indexing_bit_count = size2bit(cache_sets);
     
+    //creat cache for simulation
+    cach** my_cach = new cach*[cache_sets];
+    for(int i=0;i<cache_sets;i++){
+        my_cach[i] = new cach[associativity];
+    }
 
     //bonus=========================================================
     C_array = new double*[address_bits];
@@ -218,6 +253,7 @@ int main(int argc,char* argv[]){
     */
     //try many set================================================================
     int picked[35];
+    int set_no = 0;
     for(int i=0;i<35;i++) picked[i] = 0;
     vector<int> set1;
     cout<<"Q_array:\n";
@@ -230,8 +266,14 @@ int main(int argc,char* argv[]){
             cout<<coll_set[i][j]<<" ";
         }
         cout<<"\n";
+        if(miss_right(i, my_cach)){
+            set_no = i;
+        }
     }
-    
+    cout<<"pick set is :"<<set_no<<"\n";
+    for(int i=0;i<indexing_bit_count;i++) cout<<" "<<coll_set[set_no][i];
+    cout<<"\n";
+    cout<<"mini miss is : "<<mini_miss<<"\n";
     
     //============================================================================
     /*
@@ -246,14 +288,10 @@ int main(int argc,char* argv[]){
     //sort indexing bit
     //sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
     
-    //creat cache for simulation
-    cach** my_cach = new cach*[cache_sets];
-    for(int i=0;i<cache_sets;i++){
-        my_cach[i] = new cach[associativity];
-    }
     for(int i=0;i<cache_sets;i++){
         for(int j=0;j<associativity;j++){
             my_cach[i][j].NRU_bit = 1;
+            my_cach[i][j].tag = "-1";
         }
     }
     /*
