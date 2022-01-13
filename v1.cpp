@@ -173,6 +173,14 @@ int main(int argc,char* argv[]){
             C_array[i][j] = C_array[j][i] = C;
         }
     }
+    cout<<"this is C_chart\n";
+    for(int i=0;i<address_bits - offset_bit_count;i++){
+        for(int j=0;j<address_bits - offset_bit_count;j++){
+            if(i==j) cout<<"x ";
+            else cout<<C_array[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
     //build Q_chart
     for(int i=0;i<address_bits - offset_bit_count;i++){
         double Z = 0;
