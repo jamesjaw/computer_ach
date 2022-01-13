@@ -73,6 +73,7 @@ double** C_array;
 //for try main set===============================================
 vector<int> coll_set[5000005];
 int set_num = 0;
+
 void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* picked){
     if(set_num == 5000000) return;
     if(index_bit_count == 0){
@@ -83,9 +84,13 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
     double max = -1;
     int same_value_bit[35];
     int same_value_count = 0;
+    vector<double> wanna_sort;
+    for(int i=0;i<address_bits - offset_bit_count;i++) wanna_sort[i] = chart[i];
+    sort(wanna_sort.begin(), wanna_sort.begin() + address_bits - offset_bit_count);
+    int min = wanna_sort[address_bits - offset_bit_count - 6];
     for(int j=0;j<address_bits - offset_bit_count;j++){
         if(picked[j] == 0){
-            if(chart[j] > 0){
+            if(chart[j] >= min){
                 //max = chart[j];
                 //same_value_count = 0;
                 same_value_bit[same_value_count++] = j;
