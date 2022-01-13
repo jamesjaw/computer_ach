@@ -73,7 +73,7 @@ double** C_array;
 //for try main set===============================================
 vector<int> coll_set[5000005];
 int set_num = 0;
-void try_many_set(int index_bit_count ,double* chart, vector<int> set){
+void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* picked){
     if(set_num == 5000000) return;
     if(index_bit_count == 0){
         coll_set[set_num++] = set;
@@ -84,13 +84,15 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set){
     int same_value_bit[35];
     int same_value_count = 0;
     for(int j=0;j<address_bits - offset_bit_count;j++){
-        if(chart[j] > max){
-            max = chart[j];
-            same_value_count = 0;
-            same_value_bit[same_value_count++] = j;
-        }
-        else if(chart[j] == max){
-            same_value_bit[same_value_count++] = j;
+        if(picked[j] == 0){
+            if(chart[j] > max){
+                max = chart[j];
+                same_value_count = 0;
+                same_value_bit[same_value_count++] = j;
+            }
+            else if(chart[j] == max){
+                same_value_bit[same_value_count++] = j;
+            }
         }
     }
     
@@ -114,7 +116,9 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set){
                 chart[j] = chart[j]*C_array[pick][j];
             }
         }
-        try_many_set(index_bit_count -1,chart, my_set);
+        picked[pick] = 1;
+        try_many_set(index_bit_count -1,chart, my_set, picked);
+        picked[pick] = 0;
         for(int j=0;j<address_bits - offset_bit_count;j++){
             chart[j] = temp_chart[j];
         }
@@ -205,11 +209,13 @@ int main(int argc,char* argv[]){
     }
     */
     //try many set================================================================
+    int picked[35];
+    for(int i=0;i<35;i++) picked[i] = 0;
     vector<int> set1;
     cout<<"Q_array:\n";
     for(int i=0;i<address_bits - offset_bit_count;i++) cout<<Q_array[i]<<" ";
     cout<<"\n";
-    try_many_set(indexing_bit_count, Q_array, set1);
+    try_many_set(indexing_bit_count, Q_array, set1, picked);
     for(int i=0;i<set_num;i++){
         cout<<"set "<<i<<":";
         for(int j=0;j<indexing_bit_count;j++){
