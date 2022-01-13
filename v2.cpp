@@ -277,11 +277,12 @@ int main(int argc,char* argv[]){
             set_no = i;
         }
     }
+    /*
     cout<<"pick set is :"<<set_no<<"\n";
     for(int i=0;i<indexing_bit_count;i++) cout<<" "<<coll_set[set_no][i];
     cout<<"\n";
     cout<<"mini miss is : "<<mini_miss<<"\n";
-    
+    */
     //============================================================================
     /*
     //baseline LSB ===============================================================
