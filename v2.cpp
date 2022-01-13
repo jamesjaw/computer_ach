@@ -81,13 +81,15 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
         return;
     }
 
-    double max = -1;
     int same_value_bit[35];
     int same_value_count = 0;
     vector<double> wanna_sort;
     for(int i=0;i<address_bits - offset_bit_count;i++) wanna_sort.push_back(chart[i]);
     sort(wanna_sort.begin(), wanna_sort.begin() + address_bits - offset_bit_count);
-    double min = wanna_sort[address_bits - offset_bit_count - 6];
+    int D = 6;
+    if(address_bits - offset_bit_count < 6) D = address_bits - offset_bit_count;
+    
+    double min = wanna_sort[address_bits - offset_bit_count - D];
     for(int j=0;j<address_bits - offset_bit_count;j++){
         if(picked[j] == 0){
             if(chart[j] >= min){
@@ -291,7 +293,8 @@ int main(int argc,char* argv[]){
     //============================================================================
     */
     //sort indexing bit
-    //sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
+    indexing_bit = coll_set[set_no];
+    sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
     
     for(int i=0;i<cache_sets;i++){
         for(int j=0;j<associativity;j++){
@@ -299,7 +302,7 @@ int main(int argc,char* argv[]){
             my_cach[i][j].tag = "-1";
         }
     }
-    /*
+    
     //process
     for(int i=0;i<p_count;i++){
         string tag;
@@ -348,7 +351,6 @@ int main(int argc,char* argv[]){
     
     out<<"Total cache miss count: "<<miss<<"\n";
     out.close();
-    */
     
     /* somehow it make error Q_Q
     //delete malloc
