@@ -85,9 +85,9 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
     int same_value_bit[35];
     int same_value_count = 0;
     vector<double> wanna_sort;
-    for(int i=0;i<address_bits - offset_bit_count;i++) wanna_sort[i] = chart[i];
+    for(int i=0;i<address_bits - offset_bit_count;i++) wanna_sort.push_back(chart[i]);
     sort(wanna_sort.begin(), wanna_sort.begin() + address_bits - offset_bit_count);
-    int min = wanna_sort[address_bits - offset_bit_count - 6];
+    double min = wanna_sort[address_bits - offset_bit_count - 6];
     for(int j=0;j<address_bits - offset_bit_count;j++){
         if(picked[j] == 0){
             if(chart[j] >= min){
