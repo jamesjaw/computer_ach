@@ -85,14 +85,14 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
     int same_value_count = 0;
     for(int j=0;j<address_bits - offset_bit_count;j++){
         if(picked[j] == 0){
-            if(chart[j] > max){
-                max = chart[j];
+            if(chart[j] > 0){
+                //max = chart[j];
                 same_value_count = 0;
                 same_value_bit[same_value_count++] = j;
-            }
-            else if(chart[j] == max){
-                same_value_bit[same_value_count++] = j;
-            }
+            //}
+            //else if(chart[j] == max){
+                //same_value_bit[same_value_count++] = j;
+            //}
         }
     }
     
@@ -109,7 +109,7 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
         cout<<"\n";
         vector<int> my_set = set;
         
-        my_set.push_back(pick);
+        my_set.push_back(address_bits -1 - pick);
         chart[pick] = -2;
         for(int j=0;j<address_bits - offset_bit_count;j++){
             if(j!=pick){
