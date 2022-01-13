@@ -100,6 +100,7 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set){
         vector<int> my_set = set;
         
         my_set.push_back(pick);
+        my_chart[pick] = -2;
         for(int j=0;j<address_bits - offset_bit_count;j++){
             if(j!=pick){
                 my_chart[j] = my_chart[j]*C_array[pick][j];
@@ -216,7 +217,7 @@ int main(int argc,char* argv[]){
     //============================================================================
     */
     //sort indexing bit
-    sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
+    //sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
     
     //creat cache for simulation
     cach** my_cach = new cach*[cache_sets];
@@ -228,7 +229,7 @@ int main(int argc,char* argv[]){
             my_cach[i][j].NRU_bit = 1;
         }
     }
-    
+    /*
     //process
     for(int i=0;i<p_count;i++){
         string tag;
@@ -277,6 +278,8 @@ int main(int argc,char* argv[]){
     
     out<<"Total cache miss count: "<<miss<<"\n";
     out.close();
+    */
+    
     /* somehow it make error Q_Q
     //delete malloc
     for(int i=0;i<cache_sets;i++){
@@ -290,5 +293,6 @@ int main(int argc,char* argv[]){
     delete [] C_array;
     delete [] Q_array;
     */
+    
     return 0;
 }
