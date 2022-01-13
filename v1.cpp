@@ -97,22 +97,24 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set){
     for(int i=0;i<same_value_count;i++){
         cout<<index_bit_count<<"same:"<< same_value_bit[i]<<" ";
         int pick = same_value_bit[i];
-        double my_chart[35];
-        for(int j=0;j<address_bits - offset_bit_count;j++) my_chart[j] = chart[j];
+        double temp_chart[35];
+        for(int j=0;j<address_bits - offset_bit_count;j++) temp_chart[j] = chart[j];
         cout<<"round:"<<i<<"chart:\n";
-        for(int j=0;j<address_bits - offset_bit_count;j++) cout<<my_chart[j]<<" ";
+        for(int j=0;j<address_bits - offset_bit_count;j++) cout<<chart[j]<<" ";
         cout<<"\n";
         vector<int> my_set = set;
         
         my_set.push_back(pick);
-        my_chart[pick] = -2;
+        chart[pick] = -2;
         for(int j=0;j<address_bits - offset_bit_count;j++){
             if(j!=pick){
-                my_chart[j] = my_chart[j]*C_array[pick][j];
+                chart[j] = chart[j]*C_array[pick][j];
             }
         }
-        
-        try_many_set(index_bit_count -1, my_chart, my_set);
+        try_many_set(index_bit_count -1,chart, my_set);
+        for(int j=0;j<address_bits - offset_bit_count;j++){
+            chart[j] = temp_chart[j];
+        }
     }
 }
 
@@ -207,7 +209,7 @@ int main(int argc,char* argv[]){
     try_many_set(indexing_bit_count, Q_array, set1);
     for(int i=0;i<set_num;i++){
         cout<<"set "<<i<<":";
-        for(int j=0;j<address_bits - offset_bit_count;j++){
+        for(int j=0;j<indexing_bit_count;j++){
             cout<<coll_set[i][j]<<" ";
         }
         cout<<"\n";
