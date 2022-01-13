@@ -93,9 +93,12 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set){
             same_value_bit[same_value_count++] = j;
         }
     }
-
+    
+    cout<<index_bit_count<<"same:"<<same_value_count<<" \n";
+    for(int i=0;i<same_value_count;i++) cout<<" "<<same_value_bit[i];
+    cout<<"\n";
+    
     for(int i=0;i<same_value_count;i++){
-        cout<<index_bit_count<<"same:"<< same_value_bit[i]<<" ";
         int pick = same_value_bit[i];
         double temp_chart[35];
         for(int j=0;j<address_bits - offset_bit_count;j++) temp_chart[j] = chart[j];
