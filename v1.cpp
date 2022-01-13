@@ -201,6 +201,9 @@ int main(int argc,char* argv[]){
     */
     //try many set================================================================
     vector<int> set1;
+    cout<<"Q_array:\n";
+    for(int i=0;i<indexing_bit_count;i++) cout<<Q_array[i]<<" ";
+    cout<<"\n";
     try_many_set(indexing_bit_count, Q_array, set1);
     for(int i=0;i<set_num;i++){
         cout<<"set "<<i<<":";
