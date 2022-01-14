@@ -28,7 +28,7 @@ vector<bool> hitornot;
 int NRU(int way,cach* recode){
     int pick = 0;
     bool find = false;
-    
+
     while(find == false){
         for(int i=0;i<way;i++){
             if(recode[i].NRU_bit == 1){
@@ -51,7 +51,7 @@ bool hit(int way,cach* set,string add){
             return true;
         }
     }
-    
+
     int pick = NRU(way, set);
     set[pick].tag = add;
     return false;
@@ -88,7 +88,7 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
     sort(wanna_sort.begin(), wanna_sort.begin() + address_bits - offset_bit_count);
     int D = 11;
     if(address_bits - offset_bit_count < D) D = address_bits - offset_bit_count;
-    
+
     double min = wanna_sort[address_bits - offset_bit_count - D];
     for(int j=0;j<address_bits - offset_bit_count;j++){
         if(picked[j] == 0){
@@ -102,11 +102,11 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
             //}
         }
     }
-    
+
     //cout<<index_bit_count<<"same:"<<same_value_count<<" \n";
     //for(int i=0;i<same_value_count;i++) cout<<" "<<same_value_bit[i];
    // cout<<"\n";
-    
+
     for(int i=0;i<same_value_count;i++){
         int pick = same_value_bit[i];
         double temp_chart[35];
@@ -115,7 +115,7 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
         //for(int j=0;j<address_bits - offset_bit_count;j++) cout<<chart[j]<<" ";
         //cout<<"\n";
         vector<int> my_set = set;
-        
+
         my_set.push_back(address_bits -1 - pick);
         chart[pick] = -2;
         for(int j=0;j<address_bits - offset_bit_count;j++){
@@ -144,7 +144,7 @@ bool miss_right(int no, cach** cache){
         string tag;
         //string index 01234567 not 76543210 so pick 0~x for tag bit
         tag.assign(v_str[i], 0, address_bits - offset_bit_count);
-        
+
         int set = 0;
         int z = 1;
         for(int j=0;j<indexing_bit_count;j++){
@@ -167,12 +167,12 @@ bool miss_right(int no, cach** cache){
 int main(int argc,char* argv[]){
     //input data
     fstream in1,in2,out;
-    
+
     in1.open(argv[1],ios::in);
     string s;
     in1>>s>>address_bits>>s>>block_size>>s>>cache_sets>>s>>associativity;
     in1.close();
-    
+
     in2.open(argv[2],ios::in);
     string s1,s2;
     in2>>s1>>s2;
@@ -182,11 +182,11 @@ int main(int argc,char* argv[]){
     }
     p_count --;
     in2.close();
-    
+
     //init
     offset_bit_count = size2bit(block_size);
     indexing_bit_count = size2bit(cache_sets);
-    
+
     //creat cache for simulation
     cach** my_cach = new cach*[cache_sets];
     for(int i=0;i<cache_sets;i++){
@@ -248,9 +248,9 @@ int main(int argc,char* argv[]){
                 pick = j;
             }
         }
-    
+
         indexing_bit.push_back(address_bits -1 - pick);
-        
+
         Q_array[pick] = -2;
         for(int j=0;j<address_bits - offset_bit_count;j++){
             if(j!=pick){
@@ -295,23 +295,23 @@ int main(int argc,char* argv[]){
     //============================================================================
     */
     //sort indexing bit
-cout<<"totla set: "<<set_num<<"\n";
+//cout<<"totla set: "<<set_num<<"\n";
     indexing_bit = coll_set[set_no];
     sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
-    
+
     for(int i=0;i<cache_sets;i++){
         for(int j=0;j<associativity;j++){
             my_cach[i][j].NRU_bit = 1;
             my_cach[i][j].tag = "-1";
         }
     }
-    
+
     //process
     for(int i=0;i<p_count;i++){
         string tag;
         //string index 01234567 not 76543210 so pick 0~x for tag bit
         tag.assign(v_str[i], 0, address_bits - offset_bit_count);
-        
+
         int set = 0;
         int z = 1;
         for(int j=0;j<indexing_bit_count;j++){
@@ -351,23 +351,23 @@ cout<<"totla set: "<<set_num<<"\n";
             out<<"hit\n";
     }
     out<<".end\n\n";
-    
+
     out<<"Total cache miss count: "<<miss<<"\n";
     out.close();
-    
+
     /* somehow it make error Q_Q
     //delete malloc
     for(int i=0;i<cache_sets;i++){
         delete [] my_cach[i];
     }
     delete [] my_cach;
-    
+
     for(int i=0;i<p_count;i++){
         delete [] C_array[i];
     }
     delete [] C_array;
     delete [] Q_array;
     */
-    
+
     return 0;
 }
