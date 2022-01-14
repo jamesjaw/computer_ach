@@ -73,7 +73,7 @@ double** C_array;
 //for try main set===============================================
 vector<int> coll_set[5000005];
 int set_num = 0;
-int max_set = 150000
+int max_set = 150000;
 void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* picked){
     if(set_num == max_set) return;
     if(index_bit_count == 0){
