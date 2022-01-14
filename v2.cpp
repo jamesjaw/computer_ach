@@ -75,7 +75,7 @@ vector<int> coll_set[5000005];
 int set_num = 0;
 
 void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* picked){
-    if(set_num == 5000000) return;
+    if(set_num == 150000) return;
     if(index_bit_count == 0){
         coll_set[set_num++] = set;
         return;
@@ -86,8 +86,8 @@ void try_many_set(int index_bit_count ,double* chart, vector<int> set, int* pick
     vector<double> wanna_sort;
     for(int i=0;i<address_bits - offset_bit_count;i++) wanna_sort.push_back(chart[i]);
     sort(wanna_sort.begin(), wanna_sort.begin() + address_bits - offset_bit_count);
-    int D = 6;
-    if(address_bits - offset_bit_count < 6) D = address_bits - offset_bit_count;
+    int D = 11;
+    if(address_bits - offset_bit_count < D) D = address_bits - offset_bit_count;
     
     double min = wanna_sort[address_bits - offset_bit_count - D];
     for(int j=0;j<address_bits - offset_bit_count;j++){
@@ -161,6 +161,7 @@ bool miss_right(int no, cach** cache){
     mini_miss = temp_miss;
     return true;
 }
+
 
 
 int main(int argc,char* argv[]){
@@ -294,6 +295,7 @@ int main(int argc,char* argv[]){
     //============================================================================
     */
     //sort indexing bit
+cout<<"totla set: "<<set_num<<"\n";
     indexing_bit = coll_set[set_no];
     sort(indexing_bit.begin(), indexing_bit.begin() + indexing_bit_count);
     
